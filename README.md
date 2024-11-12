@@ -1,6 +1,7 @@
 Teste de API Advantage Online Shopping
 Visão Geral
-Oi, pessoal! Este projeto contém testes automatizados para as APIs do Advantage Online Shopping, que envolvem:
+
+Este projeto contém testes automatizados para as APIs do Advantage Online Shopping, que envolvem:
 
 Buscar produtos
 
@@ -70,14 +71,6 @@ Feature: Buscar Produto
     And o status da resposta deve ser 200
 Atualização de Imagem de Produto
 gherkin
-Feature: Atualizar Imagem de Produto
-
-  Scenario: Atualizar a imagem de um produto existente
-    Given que o usuário é autenticado com a conta ADMIN
-    And que o usuário tem um produto com ID {productId}
-    When o usuário faz uma requisição POST para atualizar a imagem do produto com o ID {productId}
-    Then a resposta deve conter um ID para a nova imagem
-    And o status da resposta deve ser 
 
 Autor 
 Lucas Rocha Alcici - https://www.linkedin.com/in/lucas-rocha-60a7a119b/
