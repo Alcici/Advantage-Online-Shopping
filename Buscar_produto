@@ -1,0 +1,83 @@
+Implementação em Java com Cucumber
+Primeiro, certifique-se de ter as dependências do Cucumber e do REST-assured no seu arquivo pom.xml:
+
+xml
+<dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>cucumber-java</artifactId>
+    <version>7.0.0</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>io.rest-assured</groupId>
+    <artifactId>rest-assured</artifactId>
+    <version>4.4.0</version>
+    <scope>test</scope>
+</dependency>
+Então, implemente os steps:
+
+java
+import io.cucumber.java.en.*;
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
+
+public class ProductSearchSteps {
+
+    private String baseUrl = "https://www.advantageonlineshopping.com/catalog/api/v1/products/search";
+    private io.restassured.response.Response response;
+
+    @Given("que o usuário deseja buscar um produto chamado {string}")
+    public void que_o_usuário_deseja_buscar_um_produto_chamado(String nomeProduto) {
+        // Nada a fazer aqui
+    }
+
+    @When("o usuário faz uma requisição GET para a API de busca de produtos")
+    public void o_usuário_faz_uma_requisição_GET_para_a_API_de_busca_de_produtos() {
+        response = given().queryParam("name", "Notebook")
+                          .when().get(baseUrl);
+    }
+
+    @Then("a resposta deve conter o produto com o nome {string}")
+    public void a_resposta_deve_conter_o_produto_com_o_nome(String nomeProduto) {
+        response.then().body("name", hasItem(nomeProduto));
+    }
+
+    @Then("o status da resposta deve ser {int}")
+    public void o_status_da_resposta_deve_ser(Integer statusCode) {
+        response.then().statusCode(statusCode);
+    }
+}
+Implementação em JavaScript com Cucumber.js
+Primeiro, certifique-se de ter as dependências do Cucumber e do axios no seu projeto:
+
+bash
+npm install @cucumber/cucumber axios
+Então, implemente os steps:
+
+javascript
+const { Given, When, Then } = require('@cucumber/cucumber');
+const axios = require('axios');
+const { expect } = require('chai');
+
+let response;
+
+Given('que o usuário deseja buscar um produto chamado {string}', function (nomeProduto) {
+  // Nada a fazer aqui
+});
+
+When('o usuário faz uma requisição GET para a API de busca de produtos', async function () {
+  response = await axios.get('https://www.advantageonlineshopping.com/catalog/api/v1/products/search', {
+    params: {
+      name: 'Notebook'
+    }
+  });
+});
+
+Then('a resposta deve conter o produto com o nome {string}', function (nomeProduto) {
+  const produtos = response.data;
+  const produtoEncontrado = produtos.some(produto => produto.name === nomeProduto);
+  expect(produtoEncontrado).to.be.true;
+});
+
+Then('o status da resposta deve ser {int}', function (statusCode) {
+  expect(response.status).to.equal(statusCode);
