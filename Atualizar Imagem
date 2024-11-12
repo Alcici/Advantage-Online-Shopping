@@ -1,0 +1,39 @@
+const { Given, When, Then } = require('@cucumber/cucumber');
+const axios = require('axios');
+const { expect } = require('chai');
+
+let response;
+let token;
+
+Given('que o usuário é autenticado com a conta ADMIN', async function () {
+  const authResponse = await axios.post('https://www.advantageonlineshopping.com/api/v1/user/login', {
+    username: 'admin',
+    password: 'admin',
+    accountType: 'ADMIN'
+  });
+  token = authResponse.data.token;
+});
+
+Given('que o usuário tem um produto com ID {string}', function (productId) {
+  // Nada a fazer aqui, apenas usamos o ID nos passos seguintes
+});
+
+When('o usuário faz uma requisição POST para atualizar a imagem do produto com o ID {string}', async function (productId) {
+  const url = `https://www.advantageonlineshopping.com/catalog/api/v1/product/image/userId/source/color`;
+  const imagePayload = { image: 'base64EncodedImage' };
+
+  response = await axios.post(url, imagePayload, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  });
+});
+
+Then('a resposta deve conter um ID para a nova imagem', function () {
+  expect(response.data).to.have.property('imageId');
+});
+
+Then('o status da resposta deve ser {int}', function (statusCode) {
+  expect(response.status).to.equal(statusCode);
+});
